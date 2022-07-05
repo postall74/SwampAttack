@@ -15,6 +15,7 @@ public class Spawner : MonoBehaviour
     private int _spawned;
 
     public event UnityAction AllEnemySpawned;
+    public event UnityAction<int, int> EnemyCountChanged;
 
     private void Start()
     {
@@ -33,6 +34,7 @@ public class Spawner : MonoBehaviour
             InstantiateEnemy();
             _spawned++;
             _temeAfterLastSpawn = 0;
+            EnemyCountChanged?.Invoke(_spawned, _currentWave.Count);
         }
 
         if (_currentWave.Count <= _spawned)
@@ -51,21 +53,22 @@ public class Spawner : MonoBehaviour
         enemy.Dying += OnEnemyDying;
     }
 
-    public void NextWave()
-    {
-        SetWave(++_currentWaveNumber);
-        _spawned = 0;
-    }
 
     private void SetWave(int index)
     {
         _currentWave = _waves[index];
+        EnemyCountChanged?.Invoke(0, 1);
     }
 
     private void OnEnemyDying(Enemy enemy)
     {
         enemy.Dying -= OnEnemyDying;
         _player.AddMoney(enemy.Reward);
+    }
+    public void NextWave()
+    {
+        SetWave(++_currentWaveNumber);
+        _spawned = 0;
     }
 }
 

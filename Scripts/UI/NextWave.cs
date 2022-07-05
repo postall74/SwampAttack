@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class NextWaveButton : MonoBehaviour
+public class NextWave : MonoBehaviour
 {
     [SerializeField] private Spawner _spawner;
     [SerializeField] private Button _nextWaveButton;
